@@ -2,6 +2,7 @@ import pygame
 from settings import Settings
 from Ship import Ship
 import game_function as gf
+from pygame.sprite import Group
 def run_game():
     """初始化游戏并创建一个屏幕对象,pygame和设置"""
     pygame.init()
@@ -13,14 +14,22 @@ def run_game():
     """开始游戏的主循环"""
     """创建一艘飞船"""
     ship = Ship(ai_settings,screen)
+    """创建一个用于存储子弹的编程"""
+    bullets = Group()
     while True:
         """监听键盘和鼠标事件"""
-        gf.check_evens(ship)
+        gf.check_evens(ai_settings,screen,ship,bullets)
         # for event in pygame.event.get():
         #     if event.type == pygame.QUIT:
         #         sys.exit()
         ship.update()
-        gf.update_screen(ai_settings,screen,ship)
+        bullets.update()
+        gf.update_bullets(bullets)
+        # for bullet in bullets.copy():
+        #     if bullet.rect.bottom <= 0:
+        #         bullets.remove(bullet)
+        # print(len(bullets))
+        gf.update_screen(ai_settings,screen,ship,bullets)
         # """每次循环时都重绘屏幕"""
         # screen.fill(ai_settings.bg_color)
         # ship.blitem()
